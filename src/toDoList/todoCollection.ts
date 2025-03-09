@@ -1,4 +1,11 @@
-import { TodoItem } from "./todoItem";
+import { TodoItem } from "./todoItem.js";
+
+type ItemCounts = {
+
+    total: number,
+    incomplete: number
+
+}
 
 export class TodoCollection {
 
@@ -18,6 +25,7 @@ export class TodoCollection {
             this.nextId++;
 
         }
+
         this.itemMap.set(this.nextId, new TodoItem(this.nextId, task));
         return this.nextId;
 
@@ -45,11 +53,31 @@ export class TodoCollection {
             todoItem.complete = complete;
 
         }
+
     }
 
-    retAll() {
+    removeComplete() {
 
-        return this.itemMap
+        this.itemMap.forEach(item => {
+
+            if (item.complete) {
+
+                this.itemMap.delete(item.id);
+
+            }
+
+        })
+
+    }
+
+    getItemCounts(): ItemCounts {
+
+        return {
+
+            total: this.itemMap.size,
+            incomplete: this.getTodoItems(false).length
+
+        };
 
     }
 
